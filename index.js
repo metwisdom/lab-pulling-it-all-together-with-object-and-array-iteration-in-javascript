@@ -137,14 +137,16 @@ function playerNumbers(teamName) {
 }
 
 function playerStats(playerName) {
-  return Object.values(gameObject())
-    .reduce((players, team) => players.concat(Object.entries(team.players)), [])
-    .find(([name]) => name === playerName)?.[1];
+  const result = Object.values(gameObject())
+    .flatMap(team => Object.entries(team.players))
+    .find(([name]) => name === playerName);
+
+  return result ? result[1] : undefined;
 }
 
 function bigShoeRebounds() {
   return Object.values(gameObject())
-    .reduce((players, team) => players.concat(Object.values(team.players)), [])
+    .flatMap(team => Object.values(team.players))
     .reduce((largest, player) => player.shoe > largest.shoe ? player : largest)
     .rebounds;
 }
